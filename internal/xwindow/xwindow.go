@@ -120,28 +120,28 @@ func GetDisplayBounds(displayIndex int) (rect image.Rectangle) {
 	defer func() {
 		e := recover()
 		if e != nil {
-			rect = image.ZR
+			rect = image.Rectangle{}
 		}
 	}()
 
 	c, err := xgb.NewConn()
 	if err != nil {
-		return image.ZR
+		return image.Rectangle{}
 	}
 	defer c.Close()
 
 	err = xinerama.Init(c)
 	if err != nil {
-		return image.ZR
+		return image.Rectangle{}
 	}
 
 	reply, err := xinerama.QueryScreens(c).Reply()
 	if err != nil {
-		return image.ZR
+		return image.Rectangle{}
 	}
 
 	if displayIndex >= int(reply.Number) {
-		return image.ZR
+		return image.Rectangle{}
 	}
 
 	primary := reply.ScreenInfo[0]
